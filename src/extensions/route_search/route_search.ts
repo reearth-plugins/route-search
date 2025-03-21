@@ -1,4 +1,4 @@
-import html from "@distui/demo/main/index.html?raw";
+import html from "@distui/route_search/main/index.html?raw";
 
 import { GlobalThis, MouseEventProps } from "@/shared/reearthTypes";
 

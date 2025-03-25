@@ -1,7 +1,0 @@
-id: route-search-plugin
-name: Route Search Plugin
-version: 1.0.0
-extensions:
-  - id: route_search
-    type: widget
-    name: Route Search Plugin

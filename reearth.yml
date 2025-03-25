@@ -1,0 +1,13 @@
+id: route-search-plugin
+name: Route search
+version: 1.0.0
+extensions:
+  - id: route-search
+    type: widget
+    name: Route search Widget
+    description: Route search Widget
+    widgetLayout:
+      defaultLocation:
+        zone: outer
+        section: left
+        area: top

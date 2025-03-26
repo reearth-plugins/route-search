@@ -205,6 +205,16 @@ input[type="radio"] {
 </div>
 `);
 
+// 初期カメラ位置を新宿周辺に設定
+reearth.camera.setView({
+  lat: 35.68426,
+  lng: 139.71043,
+  height: 2000,
+  heading: 0,
+  pitch: -0.785,
+  roll: 0,
+});
+
 // 避難所レイヤ追加
 const shelterLayer = {
   type: "simple",

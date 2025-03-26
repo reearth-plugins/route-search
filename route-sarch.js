@@ -204,3 +204,35 @@ input[type="radio"] {
     </div>
 </div>
 `);
+
+// 避難所レイヤ追加
+const shelterLayer = {
+  type: "simple",
+  data: {
+    type: "csv",
+    url: "https://api.visualizer.reearth.io/assets/01jq5wz8aycw1b2xrajnv5t2ym.csv",
+    csv: {
+      // 緯度経度の列名を指定する
+      lngColumn: "経度",
+      latColumn: "緯度",
+    },
+  },
+  marker: {
+    // スタイルの設定
+    imageColor: "red",
+    label: true,
+    labelBackground: true,
+    labelBackgroundColor: "#6c6c6cff",
+    labelPosition: "top",
+    labelText: {
+      expression: "${施設名}",
+    },
+    labelTypography: {
+      color: "#FFFFFF",
+      fontSize: 10,
+    },
+    style: "image",
+  },
+};
+
+reearth.layers.add(shelterLayer);

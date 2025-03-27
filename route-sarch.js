@@ -206,7 +206,6 @@ input[type="radio"] {
   async function getRoute(start, end, osrmProfile) {
     const url =
       "https://router.project-osrm.org/route/v1/foot/139.7671,35.6812;139.7621,35.6412?overview=full&geometries=geojson";
-    console.log(url)
 
     try {
       const res = await fetch(url);
@@ -235,7 +234,6 @@ input[type="radio"] {
   }
 
   function addRouteLayer(geojson) {
-    console.log("function addRouteLayer")
     parent.postMessage({
       action: "addRouteLayer",
       geojson: geojson
@@ -300,9 +298,7 @@ const shelterLayer = {
 reearth.layers.add(shelterLayer);
 
 reearth.extension.on("message", (msg) => {
-  console.log(msg);
   if (msg.action === "addRouteLayer") {
-    console.log(msg);
     const routeLayer = {
       type: "simple",
       data: {

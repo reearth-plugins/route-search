@@ -150,58 +150,58 @@ input[type="radio"] {
 }
 </style>
 <div class="container">
-    <div class="header">
+  <div class="header">
     <div class="header-title">
-        <img src="https://api.visualizer.reearth.io/assets/01jq5jw37s3n31dn3r894vhbrx.svg" width="20" height="20" />
-        <h2 class="title-text">経路検索</h2>
+      <img src="https://api.visualizer.reearth.io/assets/01jq5jw37s3n31dn3r894vhbrx.svg" width="20" height="20" />
+      <h2 class="title-text">経路検索</h2>
     </div>
     <div class="close-button">
-        <img src="https://api.visualizer.reearth.io/assets/01jq5jwamr4j1psx403yfzg3yq.svg" width="20" height="20" />
+      <img src="https://api.visualizer.reearth.io/assets/01jq5jwamr4j1psx403yfzg3yq.svg" width="20" height="20" />
     </div>
-    </div>
-    <div class="form-area">
+  </div>
+  <div class="form-area">
     <div class="select-point-section">
-        <div class="point-group">
+      <div class="point-group">
         <span class="label-text" for="destination">開始点</span>
         <div class="input-wrapper">
-            <input class="location-input" type="text" placeholder="場所を入力" />
-            <button>
+          <input class="location-input" id="start-point" type="text" placeholder="場所を入力" />
+          <button>
             <img
-                src="https://api.visualizer.reearth.io/assets/01jq5k03t33w70121atw85n2ed.svg"
-                width="20"
-                height="20"
+              src="https://api.visualizer.reearth.io/assets/01jq5k03t33w70121atw85n2ed.svg"
+              width="20"
+              height="20"
             />
-            </button>
+          </button>
         </div>
-        </div>
-        <div class="point-group">
+      </div>
+      <div class="point-group">
         <span class="label-text" for="destination">到着点</span>
         <div class="input-wrapper">
-            <input class="location-input" type="text" placeholder="場所を入力" />
-            <button>
+          <input class="location-input" id="end-point" type="text" placeholder="場所を入力" />
+          <button>
             <img
-                src="https://api.visualizer.reearth.io/assets/01jq5k03t33w70121atw85n2ed.svg"
-                width="20"
-                height="20"
+              src="https://api.visualizer.reearth.io/assets/01jq5k03t33w70121atw85n2ed.svg"
+              width="20"
+              height="20"
             />
-            </button>
+          </button>
         </div>
-        </div>
+      </div>
     </div>
     <div class="select-move-section">
-        <span class="label-text" for="move">移動方法</span>
-        <div class="radio-group">
+      <span class="label-text" for="move">移動方法</span>
+      <div class="radio-group">
         <label
-            ><input type="radio" name="transport" value="walk" checked /><span class="label-text">徒歩</span></label
+          ><input type="radio" name="transport" value="foot" checked /><span class="label-text">徒歩</span></label
         >
         <label><input type="radio" name="transport" value="bike" /><span class="label-text">自転車</span></label>
         <label><input type="radio" name="transport" value="car" /><span class="label-text">自動車</span></label>
-        </div>
+      </div>
     </div>
     <div class="search-button-area">
-        <button class="search-btn"><span>検索</span></button>
+      <button class="search-btn" onclick="searchRoute()"><span>検索</span></button>
     </div>
-    </div>
+  </div>
 </div>
 `);
 

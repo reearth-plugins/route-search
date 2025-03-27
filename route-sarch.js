@@ -192,8 +192,7 @@ input[type="radio"] {
       <span class="label-text" for="move">移動方法</span>
       <div class="radio-group">
         <label
-          ><input type="radio" name="transport" value="foot" checked /><span class="label-text">徒歩</span></label
-        >
+          ><input type="radio" name="transport" value="foot" checked /><span class="label-text">徒歩</span></label>
         <label><input type="radio" name="transport" value="bike" /><span class="label-text">自転車</span></label>
         <label><input type="radio" name="transport" value="car" /><span class="label-text">自動車</span></label>
       </div>
@@ -203,8 +202,61 @@ input[type="radio"] {
     </div>
   </div>
 </div>
-`);
+<script>
+  async function getRoute(start, end, osrmProfile) {
+    const url =
+      "https://router.project-osrm.org/route/v1/foot/139.7671,35.6812;139.7621,35.6412?overview=full&geometries=geojson";
+    console.log(url)
 
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+
+      if (data.code === "Ok") {
+        const route = data.routes[0];
+
+        const geojson = {
+          type: "Feature",
+          geometry: route.geometry,
+          properties: {
+            distance: route.distance,
+            duration: route.duration,
+          },
+        };
+
+        return geojson;
+      } else {
+        throw new Error("ルート取得に失敗しました。");
+      }
+    } catch (err) {
+      console.error("getRoute エラー:", err);
+      throw err; // 呼び出し元でキャッチ
+    }
+  }
+
+  function addRouteLayer(geojson) {
+    console.log("function addRouteLayer")
+    parent.postMessage({
+      action: "addRouteLayer",
+      geojson: geojson
+    }, "*")
+  }
+
+  async function searchRoute() {
+    // 開始点と到着点の座標情報を取得
+    const start = document.getElementById("start-point").value.trim();
+    const end = document.getElementById("end-point").value.trim();
+    // 移動方法を取得
+    const osrmProfile = document.querySelector('input[name="transport"]:checked').value;
+
+    try {
+      const geojson = await getRoute(start, end, osrmProfile);
+      addRouteLayer(geojson);
+    } catch (error) {
+      console.log("ルートの取得に失敗しました。" + error);
+    }
+  }
+</script>`);
 // 初期カメラ位置を新宿周辺に設定
 reearth.camera.setView({
   lat: 35.68426,
@@ -246,3 +298,21 @@ const shelterLayer = {
 };
 
 reearth.layers.add(shelterLayer);
+
+reearth.extension.on("message", (msg) => {
+  console.log(msg);
+  if (msg.action === "addRouteLayer") {
+    console.log(msg);
+    const routeLayer = {
+      type: "simple",
+      data: {
+        type: "geojson",
+        value: msg.geojson,
+      },
+      polyline: {},
+    };
+
+    // Re:Earthにルートレイヤを追加する
+    reearth.layers.add(routeLayer);
+  }
+});

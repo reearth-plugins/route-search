@@ -309,7 +309,10 @@ reearth.extension.on("message", (msg) => {
         type: "geojson",
         value: msg.geojson,
       },
-      polyline: {},
+      polyline: {
+        strokeColor: "blue",
+        strokeWidth: 2,
+      },
     };
 
     // Re:Earthにルートレイヤを追加する

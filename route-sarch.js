@@ -165,7 +165,7 @@ input[type="radio"] {
         <span class="label-text" for="destination">開始点</span>
         <div class="input-wrapper">
           <input class="location-input" id="start-point" type="text" placeholder="場所を入力" />
-          <button>
+          <button onclick="handleIconClick('start', this)">
             <img
               src="https://api.visualizer.reearth.io/assets/01jq5k03t33w70121atw85n2ed.svg"
               width="20"
@@ -178,7 +178,7 @@ input[type="radio"] {
         <span class="label-text" for="destination">到着点</span>
         <div class="input-wrapper">
           <input class="location-input" id="end-point" type="text" placeholder="場所を入力" />
-          <button>
+          <button onclick="handleIconClick('end', this)">
             <img
               src="https://api.visualizer.reearth.io/assets/01jq5k03t33w70121atw85n2ed.svg"
               width="20"
@@ -256,6 +256,49 @@ input[type="radio"] {
       console.log("ルートの取得に失敗しました。" + error);
     }
   }
+
+  let selecting = null;
+  let activeButton = null;
+
+  function handleIconClick(type, btn) {
+    const icon = btn.querySelector("img");
+
+    if (selecting === type) {
+      // 選択解除
+      selecting = null;
+      activeButton = null;
+      icon.style.filter = "";
+    } else {
+      // 選択状態切り替え
+      selecting = type;
+      resetAllIconColors();
+      icon.style.filter = "invert(29%) sepia(96%) saturate(7472%) hue-rotate(0deg) brightness(102%) contrast(108%)"; // 赤っぽく
+      activeButton = btn;
+    }
+  }
+
+  // アイコン色を元に戻す
+  function resetAllIconColors() {
+    const icons = document.querySelectorAll("button > img");
+    icons.forEach((img) => {
+      img.style.filter = "";
+    });
+  }
+
+  window.addEventListener("message", (e) => {
+    const msg = e.data;
+    if (msg.type === "position") {
+      if (!selecting) return;
+      var coordinates = msg.lng + "," + msg.lat;
+      if (selecting === "start") {
+        document.getElementById("start-point").value = coordinates || "-";
+      } else if (selecting === "end") {
+        document.getElementById("end-point").value = coordinates || "-";
+      }
+      selecting = null;
+      resetAllIconColors();
+    }
+  });
 </script>`);
 // 初期カメラ位置を新宿周辺に設定
 reearth.camera.setView({
@@ -316,4 +359,14 @@ reearth.extension.on("message", (msg) => {
     // Re:Earthにルートレイヤを追加する
     reearth.layers.add(routeLayer);
   }
+});
+
+reearth.viewer.on("click", (event) => {
+  const { lat, lng } = event;
+
+  reearth.ui.postMessage({
+    type: "position",
+    lat: lat,
+    lng: lng,
+  });
 });

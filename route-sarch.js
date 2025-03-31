@@ -289,7 +289,7 @@ input[type="radio"] {
     const msg = e.data;
     if (msg.type === "position") {
       if (!selecting) return;
-      var coordinates = msg.lng + "," + msg.lat;
+      var coordinates = msg.lng.toFixed(6)  + "," + msg.lat.toFixed(6) ;
       if (selecting === "start") {
         document.getElementById("start-point").value = coordinates || "-";
       } else if (selecting === "end") {

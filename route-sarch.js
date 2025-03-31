@@ -204,8 +204,10 @@ input[type="radio"] {
 </div>
 <script>
   async function getRoute(start, end, osrmProfile) {
-    const url =
-      "https://router.project-osrm.org/route/v1/foot/139.7671,35.6812;139.7621,35.6412?overview=full&geometries=geojson";
+    const url = "https://router.project-osrm.org/route/v1/" +
+            osrmProfile + "/" +
+            start + ";" + end +
+            "?overview=full&geometries=geojson";
 
     try {
       const res = await fetch(url);

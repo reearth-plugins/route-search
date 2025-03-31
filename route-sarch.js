@@ -344,8 +344,16 @@ reearth.layers.add(shelterLayer);
 
 reearth.extension.on("message", (msg) => {
   if (msg.action === "addRouteLayer") {
+    // 前のルートレイヤが残っていたら削除する
+    const routeLayers = reearth.layers.findAll((layer) => layer.title === "route");
+    if (routeLayers.length) {
+      const routeLayerIds = routeLayers.map((layer) => layer.id);
+      reearth.layers.delete(...routeLayerIds);
+    }
+
     const routeLayer = {
       type: "simple",
+      title: "route",
       data: {
         type: "geojson",
         value: msg.geojson,

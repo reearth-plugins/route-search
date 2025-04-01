@@ -371,6 +371,14 @@ reearth.extension.on("message", (msg) => {
         type: "geojson",
         value: msg.geojson,
       },
+      infobox: {
+        blocks: [
+          {
+            pluginId: "reearth",
+            extensionId: "propertyInfoboxBetaBlock",
+          },
+        ],
+      },
       polyline: {
         strokeColor: "blue",
         strokeWidth: 2,

@@ -285,6 +285,18 @@ input[type="radio"] {
     });
   }
 
+  function addMarkerLayer(lat, lng, pointName) {
+    parent.postMessage(
+      {
+        action: "addMarkerLayer",
+        lat: lat,
+        lng: lng,
+        pointName: pointName
+      },
+      "*"
+    );
+  }
+
   window.addEventListener("message", (e) => {
     const msg = e.data;
     if (msg.type === "position") {
@@ -295,6 +307,7 @@ input[type="radio"] {
       } else if (selecting === "end") {
         document.getElementById("end-point").value = coordinates || "-";
       }
+      addMarkerLayer(msg.lat, msg.lng, selecting);
       selecting = null;
       resetAllIconColors();
     }
@@ -366,6 +379,29 @@ reearth.extension.on("message", (msg) => {
 
     // Re:Earthにルートレイヤを追加する
     reearth.layers.add(routeLayer);
+  } else if (msg.action === "addMarkerLayer") {
+    const markerLayer = {
+      type: "simple",
+      title: msg.pointName,
+      data: {
+        type: "geojson",
+        value: {
+          type: "FeatureCollection",
+          features: [
+            {
+              type: "Feature",
+              properties: {},
+              geometry: {
+                coordinates: [msg.lng, msg.lat],
+                type: "Point",
+              },
+            },
+          ],
+        },
+      },
+      marker: {},
+    };
+    reearth.layers.add(markerLayer);
   }
 });
 

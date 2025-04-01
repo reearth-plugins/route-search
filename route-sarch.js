@@ -380,28 +380,52 @@ reearth.extension.on("message", (msg) => {
     // Re:Earthにルートレイヤを追加する
     reearth.layers.add(routeLayer);
   } else if (msg.action === "addMarkerLayer") {
-    const markerLayer = {
-      type: "simple",
-      title: msg.pointName,
-      data: {
-        type: "geojson",
-        value: {
-          type: "FeatureCollection",
-          features: [
-            {
-              type: "Feature",
-              properties: {},
-              geometry: {
-                coordinates: [msg.lng, msg.lat],
-                type: "Point",
+    // 開始点または到達点のマーカーレイヤがすでに追加されている場合は、座標を更新する
+    const markerLayer = reearth.layers.find((layer) => layer.title === msg.pointName);
+    if (markerLayer) {
+      reearth.layers.override(markerLayer.id, {
+        data: {
+          type: "geojson",
+          value: {
+            type: "FeatureCollection",
+            features: [
+              {
+                type: "Feature",
+                properties: {},
+                geometry: {
+                  coordinates: [msg.lng, msg.lat],
+                  type: "Point",
+                },
               },
-            },
-          ],
+            ],
+          },
         },
-      },
-      marker: {},
-    };
-    reearth.layers.add(markerLayer);
+      });
+      // 開始点または到達点のマーカーレイヤが追加されていない場合は、レイヤを追加する
+    } else {
+      const markerLayer = {
+        type: "simple",
+        title: msg.pointName,
+        data: {
+          type: "geojson",
+          value: {
+            type: "FeatureCollection",
+            features: [
+              {
+                type: "Feature",
+                properties: {},
+                geometry: {
+                  coordinates: [msg.lng, msg.lat],
+                  type: "Point",
+                },
+              },
+            ],
+          },
+        },
+        marker: {},
+      };
+      reearth.layers.add(markerLayer);
+    }
   }
 });
 

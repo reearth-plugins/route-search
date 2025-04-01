@@ -422,7 +422,11 @@ reearth.extension.on("message", (msg) => {
             ],
           },
         },
-        marker: {},
+        marker: {
+          pointColor: "blue",
+          pointSize: 12,
+          style: "point",
+        },
       };
       reearth.layers.add(markerLayer);
     }

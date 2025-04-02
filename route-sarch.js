@@ -213,7 +213,7 @@ reearth.ui.show(`
       </div>
       <div class="search-button-area">
         <button class="search-btn" onclick="searchRoute()"><span>検索</span></button>
-        <button class="delete-btn" onclick="deleteRoute()"><span>削除</span></button>
+        <button class="delete-btn" onclick="deleteRouteAndMarker()"><span>削除</span></button>
       </div>
     </div>
   </div>
@@ -311,6 +311,22 @@ reearth.ui.show(`
         "*"
       );
     }
+
+    function deleteRouteAndMarker() {
+      // テキストボックスの値をクリア
+      document.getElementById("start-point").value = "";
+      document.getElementById("end-point").value = "";
+
+      // 選択状態とアイコン色をリセット
+      selecting = null;
+      resetAllIconColors();
+      parent.postMessage(
+        {
+          action: "deleteRouteAndMarkerLayer",
+        },
+        "*"
+      );
+    }
   
     window.addEventListener("message", (e) => {
       const msg = e.data;
@@ -372,13 +388,6 @@ reearth.layers.add(shelterLayer);
 
 reearth.extension.on("message", (msg) => {
   if (msg.action === "addRouteLayer") {
-    // 前のルートレイヤが残っていたら削除する
-    const routeLayers = reearth.layers.findAll((layer) => layer.title === "route");
-    if (routeLayers.length) {
-      const routeLayerIds = routeLayers.map((layer) => layer.id);
-      reearth.layers.delete(...routeLayerIds);
-    }
-
     const routeLayer = {
       type: "simple",
       title: "route",
@@ -452,6 +461,23 @@ reearth.extension.on("message", (msg) => {
         },
       };
       reearth.layers.add(markerLayer);
+    }
+  } else if (msg.action === "deleteRouteAndMarkerLayer") {
+    // ルートレイヤを検索する
+    const routeLayers = reearth.layers.findAll((layer) => layer.title === "route");
+    if (routeLayers.length) {
+      const routeLayerIds = routeLayers.map((layer) => layer.id);
+      reearth.layers.delete(...routeLayerIds);
+    }
+    // 開始点のマーカーレイヤを検索する
+    const startMarkerLayer = reearth.layers.find((layer) => layer.title === "start");
+    if (startMarkerLayer) {
+      reearth.layers.delete(startMarkerLayer.id);
+    }
+    // 到達点のマーカーレイヤを検索する
+    const endMarkerLayer = reearth.layers.find((layer) => layer.title === "end");
+    if (endMarkerLayer) {
+      reearth.layers.delete(endMarkerLayer.id);
     }
   }
 });

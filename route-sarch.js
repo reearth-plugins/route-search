@@ -43,7 +43,6 @@ reearth.ui.show(`
           </div>
         </div>
       </div>
-
       <div class="display-flex p-16" style="align-items: flex-start; gap: 43px">
         <label class="font-bold">移動方法</label>
         <div class="flex-column gap-4">
@@ -54,7 +53,6 @@ reearth.ui.show(`
           <label><input type="radio" name="transport" value="car" style="width: 13px" />自動車</label>
         </div>
       </div>
-
       <div class="display-flex gap-8 p-8">
         <button class="btn-primary button-padding w-full text-sm" onclick="searchRoute()">検索</button>
         <button class="btn-neutral button-padding w-full text-sm" onclick="deleteRouteAndMarker()">削除</button>
